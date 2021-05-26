@@ -14,6 +14,8 @@ if (versionStr !== null && versionStr[0] !== '/8.x/') {
         if (response.status === 200) {
             //遷移前の履歴を残さずに遷移
             location.replace(newUrl);
+        }else{
+            alert('8.x系のドキュメントページは存在しないようです.このページに止まります．')
         }
     });
 }
