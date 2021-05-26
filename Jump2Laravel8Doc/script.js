@@ -11,11 +11,9 @@ if (versionStr !== null && versionStr[0] !== '/8.x/') {
     //遷移先にページがあるかどうか
     fetch(newUrl)
     .then(response => {
-        if (response.status !== 200) {
-            return;
+        if (response.status === 200) {
+            //遷移前の履歴を残さずに遷移
+            location.replace(newUrl);
         }
     });
-
-    //遷移前の履歴を残さずに遷移
-    location.replace(newUrl);
 }
