@@ -1,12 +1,12 @@
 //現在のURLを取得
 let currentPageUrl = location.href;
 //正規表現でドキュメントのバージョンを取得
-let versionStr = currentPageUrl.match(/\/[0-9]\.([0-9]|x)\//);
+let oldVersionStr = currentPageUrl.match(/\/[0-9]\.([0-9]|x)\//);
 //遷移先URLの初期化
 let newUrl = '';
-if (versionStr !== null && versionStr[0] !== '/8.x/') {
+if (versionStr !== null && oldVersionStr[0] !== '/8.x/') {
     //8.xのURLに書き換え
-    newUrl = currentPageUrl.replace(versionStr[0], '/8.x/');
+    newUrl = currentPageUrl.replace(oldVersionStr[0], '/8.x/');
 
     //遷移先にページがあるかどうか
     fetch(newUrl)
