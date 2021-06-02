@@ -1,21 +1,19 @@
-//現在のURLを取得
-let currentPageUrl = location.href;
-//正規表現でドキュメントのバージョンを取得
-let oldVersionStr = currentPageUrl.match(/\/[0-9]\.([0-9]|x|dev)\//);
-//遷移先URLの初期化
-let newUrl = '';
-if (oldVersionStr !== null && oldVersionStr[0] !== '/8.x/') {
-    //8.xのURLに書き換え
-    newUrl = currentPageUrl.replace(oldVersionStr[0], '/8.x/');
-
-    //遷移先にページがあるかどうか
-    fetch(newUrl)
+//最新のバージョン
+const latestVersion = '8.x';
+//バージョン部分を表すRegExp
+const versionRegex = /[0-9]\.([0-9]|x|dev)/
+//現在のURLを配列として取得
+const currentPageUrl = location.href;
+const currentPageUrlArray = currentPageUrl.split('/');
+const replacedUrl = currentPageUrlArray.map(part => part.match(versionRegex) ? latestVersion : part).join('/');
+if (replacedUrl !== currentPageUrl) {
+  //遷移先にページがあるかどうかをHEADリクエストで確認
+  fetch(replacedUrl, { method: "HEAD" })
     .then(response => {
-        if (response.ok) {
-             //遷移前の履歴を残さずに遷移
-             location.replace(newUrl);
-        }else{
-            alert('8.x系のドキュメントページは存在しないようです.このページにとどまります．');
-        }
+      if (!response.ok) throw Error("先読みエラー")
+      //遷移前の履歴を残さずに遷移
+      location.replace(replacedUrl);
+    }).catch(() => {
+      alert(`バージョン${latestVersion}のドキュメントページは存在しないようです.このページにとどまります．`);
     });
 }
